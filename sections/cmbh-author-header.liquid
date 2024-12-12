@@ -1,0 +1,166 @@
+{% schema %}
+  {
+    "name": "Author Information",
+    "tag": "section",
+    "class": "cmbh-author-information",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "author_image",
+        "label": "Author's Image"
+      },
+      {
+        "type": "text",
+        "id": "name",
+        "label": "Name"
+      },
+      {
+        "type": "text",
+        "id": "job_title",
+        "label": "Job Title"
+      },
+      {
+        "type": "text",
+        "id": "qualifications",
+        "label": "Qualifications"
+      }, {
+        "type": "text",
+        "id": "bio",
+        "label": "Bio"
+      }
+    ],
+    "blocks": [],
+    "presets": [
+      {
+        "name": "CMBH - Author Information",
+        "category": "CMBH"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+
+{% javascript %}
+{% endjavascript %}
+
+
+{% assign metaobject_products = shop.metaobjects['author'].values %}
+{% for author in metaobject_products %}
+  {% if author.name == section.settings.name %}
+    {% assign parsed_content = author.bio | metafield_tag %}
+    {% assign linkedin = author.linkedin %}
+  {% endif %}
+{% endfor %}
+
+<div class="container--large container--vertical-space-xsmall cmbh-author-information">
+
+  <div class="author-row gutter-bottom--large">
+    {%- if section.settings.author_image -%}
+      <div class="author-image ">
+        {%- render 'lazy-image'
+          , image: section.settings.author_image
+          , sizes: sizes
+          , class: 'lazy-image--to-reveal '
+          , preload: preload -%}
+      </div>
+    {%- endif -%}
+    <div class="author-bio">
+      {% if section.settings.name %}
+        <h1>{{ section.settings.name }}</h1>
+      {% endif %}
+      {% if section.settings.job_title %}
+        <h4>{{ section.settings.job_title }} |
+          <span class="text-color--opacity">{{ section.settings.qualifications }}</span>
+        </h4>
+        {% if linkedin != blank %}
+          <p >
+            <a target="_blank" href="{{linkedin}}" class="inline" >
+            <img class="linkedin-logo" src="{{ 'linkedin-logo.svg' | asset_url }}" alt="{{section.settings.name}} - {{section.settings.job_title}} | {{section.settings.qualifications}}">
+            <span class="text-color--opacity">| Find me on Linkedin</span></a>
+          </p>
+        {% endif %}
+        {% if section.settings.bio != blank %}
+          <p>{{ section.settings.bio }}</p>
+        {% endif %}
+      {% endif %}
+
+
+      {{ parsed_content }}
+    </div>
+  </div>
+
+
+  {% assign blog_handles = 'diet-nutrition,lifestyle,health,intolerances-allergies' | split: ',' %}
+
+  {% for handle in blog_handles %}
+    {% for article in blogs[handle].articles %}
+      {% assign article_handles = article_handles | concat: blogs[handle].articles %}
+    {% endfor %}
+  {% endfor %}
+
+  {% assign article_handles = article_handles | uniq %}
+
+  {{ 'component-blog-item.css' | asset_url | stylesheet_tag }}
+
+  {%- assign date_format = 'general.date_format.month_day_year' | t -%}
+
+
+{% assign matched_articles = 0 %}
+{% capture article_grid %}
+{% for article in article_handles %}
+{% if article.metafields.custom.author.value.name == section.settings.name %}
+<div class="blog-item spacing--large remove-empty-space">
+<a
+  class="blog-item__image increased-spacing"
+  href="{{ article.url }}"
+  title="{{ article.title | escape }}">
+
+  {%- render 'lazy-image'
+  , image: article.image.src
+  , alt: article.title
+  , sizes: sizes
+  , class: 'lazy-image--animation lazy-image--to-reveal'
+  , preload: preload -%}
+
+  </a>
+  <div class="blog-item__meta">
+    <span class="blog-item__date text-size--small">{{ article.updated_at | date: date_format }}</span>
+  </div>
+  <div class="blog-item__title-holder">
+    <a href="{{ article.url }}">
+      <span class="text-animation--underline text-size--large text-weight--medium text-line-height--medium">{{
+        article.title }}</span>
+    </a>
+  </div>
+</div>
+
+{% assign matched_articles = matched_articles | plus: 1 %}
+{% if matched_articles == 8 %}
+{% break %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endcapture %}
+
+{% if matched_articles > 0 %}
+<div class="section-heading section-heading--left section-heading--one-row gutter-bottom--large">
+  <div class="section-heading__text remove-empty-space">
+    <h2 class="section-heading__title text-font--secondary text-size--regular">
+      The latest from {{ section.settings.name }}
+    </h2>
+    <span class="section-heading__subheading text-size--small text-color--opacity">
+      See what they're saying
+    </span>
+  </div>
+</div>
+<div class="grid grid--layout grid-4 grid-lap-1">
+  {{ article_grid }}
+</div>
+
+{% endif %}
+
+
+</div>

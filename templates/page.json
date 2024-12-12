@@ -1,0 +1,1 @@
+{"sections":{"main":{"type":"main-page","settings":{"center":true,"page_cover_metafield":"custom.cover_image","color_background_main":"{{ page.metafields.custom.cover_overlay.value.colour.value }}","color_text_main":"{{ page.metafields.custom.title_text_colour.value.colour.value }}","height":"small"}}},"order":["main"]}

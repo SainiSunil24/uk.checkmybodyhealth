@@ -1,0 +1,97 @@
+{% schema %}
+{
+"name": "Common Intolerances",
+"tag": "section",
+"class": "cmbh-common-intolerances",
+"settings": [
+{
+"type": "text",
+"label": "Title",
+"id": "title",
+"default": "Common Food Intolerances",
+"placeholder": "Enter here"
+},{
+"type": "text",
+"label": "Subtitle",
+"id": "subtitle",
+"default": "A short explainer or qualifer line here",
+"placeholder": "Enter here"
+},
+{
+"type": "range",
+"label": "Number of Columns",
+"id": "cols",
+"min": 2,
+"max": 6,
+"step": 1,
+"default": 2
+},{
+"type": "color",
+"id": "color_background_main",
+"label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+"default": "rgba(0,0,0,0)"
+},{
+"type": "checkbox",
+"id": "gutter_decrease",
+"label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+"default": false
+}
+],
+"blocks": [],
+"presets": [
+{
+"name": "CMBH - Common Intolerances",
+"category": "CMBH"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+
+{% javascript %}
+{% endjavascript %}
+
+{% assign food_intolerance = shop.metaobjects.food_intolerance.values %}
+
+{% if food_intolerance %}
+<div class=" container--vertical-space{% if section.settings.gutter_decrease %}-small{% endif %}"
+  style="background-color:{{section.settings.color_background_main}}">
+    <div class="container--large container--vertical-space-xsmall cmbh-common-intolerances">
+      <div class="title-section">
+        {% if section.settings.title %}
+        <h3>{{section.settings.title}}</h3>
+        {% endif %}
+        {% if section.settings.subtitle %}
+        <p >{{section.settings.subtitle}}</p>
+        {% endif %}
+      </div>
+      <ul>
+        <div class="grid grid--layout grid-{{section.settings.cols}} grid-lap-1">
+          {% for intolerance in food_intolerance %}
+          <li class="gutter-bottom--regular">
+            {%- render 'lazy-image'
+            , image: intolerance.featured_image
+            , sizes: sizes
+            , class: 'lazy-image--to-reveal '
+            , preload: preload -%}
+            <h4>{{ intolerance.title }}</h3>
+              <p class="text-size--small ">{{ intolerance.excerpt }}</p>
+              <a href="{{intolerance.system.url}}" class="button   button--icon ">
+                <span class="button__icon" role="img" aria-hidden="true"><svg width="21" height="9" viewBox="0 0 21 9"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z"
+                      fill="#000"></path>
+                  </svg></span>
+                <span class="button__text text-weight-- text-size--">Read more</span>
+              </a>
+          </li>
+          {% endfor %}
+        </div>
+      </ul>
+  </div>
+</div>
+{% endif %}

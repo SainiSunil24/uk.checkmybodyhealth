@@ -1,0 +1,257 @@
+
+
+
+{{ 'cmbh-tabbed-section.css' | asset_url | stylesheet_tag }}
+
+
+
+
+
+<div class="cmbh-tabbed-section container--vertical-space-small  " >
+  <div class="container--large tabs-row">
+    <div class="tabs">
+      {% assign first = true %}
+
+      {% if product.metafields.custom.product_tabs %}
+        
+        {% for prod in product.metafields.custom.product_tabs.value %}
+          <button class="tablinks{% if first %} active{% assign first = false %}{% endif %}"
+            onclick="openTab(event, 'tab_{{ forloop.index  }}')">{{ prod.display_title }}</button>
+        {% endfor %}​
+      
+      {% endif %}
+
+
+      {% for block in section.blocks %}
+
+      {% if block.settings.link_to_anchor != blank %}
+        <button class="tablinks{% if first %} active{% assign first = false %}{% endif %}" onclick="document.getElementById('{{ block.settings.link_to_anchor }}').scrollIntoView({ behavior: 'smooth' })">{{ block.settings.title }}</button>
+      {% else %}
+        <button class="tablinks{% if first %} active{% assign first = false %}{% endif %}"
+          onclick="openTab(event, '{{ block.id }}')">{{ block.settings.title }}</button>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+
+<div class="" style="background-color:{{section.settings.background_color }} ">
+  <div class="container--large" >
+    <div id="tabbed-section" >
+
+
+      {% assign first = true %}
+
+      {% if product.metafields.custom.product_tabs %}
+      {% for prod in product.metafields.custom.product_tabs.value %}
+      <div id="tab_{{ forloop.index }}" class="tabcontent"  {% if first %}style="display: block;" {% assign first=false %}{% endif %}>
+        <div class="tab-html-content">
+          <div class="html-content-1">
+            {% if prod.display_title == "Reviews" %}
+              <!-- TrustBox widget - Mini Carousel -->
+              <div id="trustpilot-widget" class="trustpilot-widget" data-locale="en-GB" data-template-id="539adbd6dec7e10e686debee"
+                data-businessunit-id="5f0492d2b7656c0001eb1036" data-style-height="500px" data-style-width="100%" data-theme="light"
+                data-stars="4,5" data-review-languages="en">
+                <a href="https://uk.trustpilot.com/review/checkmybodyhealth.com" target="_blank" rel="noopener">Trustpilot</a>
+              </div>
+              <!-- End TrustBox widget -->
+            {% endif %}
+            <!-- Delivery policy -->
+            {% if prod.display_title == "Delivery" %}
+              {% for policy in shop.policies %}
+                {% if policy.title contains 'Shipping policy' %}
+                  {{ policy.body }}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            <!-- End Delivery policy -->
+            {{ prod.text_column_1 | metafield_tag }}
+          </div>
+         
+          {% if prod.image %}
+          <div class="optional-image" id="optional-image">
+            <img class="" src="{{ prod.image | img_url: 'large' }}" alt="Tab Image">
+          </div>
+          {% else %}
+          <div class="html-content-2">
+            {{ prod.text_column_2 }}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      
+      {% endif %}
+
+
+      {% for block in section.blocks %}
+      <div id="{{ block.id }}" class="tabcontent" {% if first %}style="display: block;" {% assign first=false %}{% endif %}>
+        <div class="tab-html-content" style="{% if block.settings.swap_direction %}flex-direction: row-reverse;{% endif %}">
+          {% if forloop.first %}
+          <div class="html-content-1">
+
+          <div class="flex-row">
+
+            
+             {% if product.metafields.custom.product_media.value != blank  %}<div class="col">{% endif  %}
+            {{ product.description }}
+            {% if product.metafields.custom.product_media.value != blank %}</div>{% endif %}
+
+          {% if product.metafields.custom.product_media.value.you_tube_id  or product.metafields.custom.product_media.value.image or product.metafields.custom.product_media.value.vimeo_id %}
+            <div class="col">
+              {% if product.metafields.custom.product_media.value.image %}
+                <div class="gutter-bottom--small">
+                <img src="{{ product.metafields.custom.product_media.value.image | img_url:'large' }}" alt="{{product.metafields.custom.product_media.value.product_name}}">
+              </div>
+            {% endif %}
+              {% if product.metafields.custom.product_media.value.you_tube_id %}
+              <div class="embed-container">
+                <iframe width="560" height="315"
+                  src="https://www.youtube.com/embed/{{ product.metafields.custom.product_media.value.you_tube_id }}?rel=0"
+                  title="YouTube video player" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+
+              </div>
+              {% endif %}
+              {% if product.metafields.custom.product_media.value.vimeo_id %}
+              <div class="embed-container">
+                <iframe src='https://player.vimeo.com/video/{{product.metafields.custom.product_media.value.vimeo_id}}' frameborder='0' webkitAllowFullScreen mozallowfullscreen
+                  allowFullScreen></iframe>
+               
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+            
+            
+            
+
+
+          </div>
+          {% else %}
+          <div class="html-content-1">
+            {{ block.settings.richtext_1 }}
+            </div>
+            {% if block.settings.optional_image %}
+              <img class="radius" src="{{ block.settings.optional_image | img_url: 'large' }}" alt="Tab Image">
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+<style>
+  
+
+  .tablinks.active {
+    background-color:{{section.settings.background_color }} ;
+  }
+
+  .tabs-row:before {
+  opacity: var(--before-opacity, 1);
+}
+
+.tabs-row:after {
+  opacity:var(--after-opacity, 1);
+}
+
+  
+</style>
+
+<script>
+  function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var tabs = document.querySelector('.tabs');
+    var tabsRow = document.querySelector('.tabs-row');
+     tabsRow.style.setProperty('--before-opacity', 0);
+      
+      tabs.addEventListener('scroll', function () {
+        console.log('scroll')
+        var scrollLeft = tabs.scrollLeft;
+        var scrollWidth = tabs.scrollWidth - tabs.clientWidth;
+        var beforeOpacity = scrollLeft > 50 ? 1 : 0;
+        var afterOpacity = scrollLeft < scrollWidth - 50 ? 1 : 0;
+        tabsRow.style.setProperty('--before-opacity', beforeOpacity);
+        tabsRow.style.setProperty('--after-opacity', afterOpacity);
+      });
+    });
+
+</script>
+
+
+  {% schema %}
+  {
+  "name": "Tabbed Section",
+  "settings": [
+  {
+  "type": "color",
+  "id": "background_color",
+  "label": "Background Color",
+  "default": "#ffffff"
+  }
+  ],
+  "blocks": [
+  {
+  "type": "tab",
+  "name": "Tab",
+  "settings": [
+      {
+      "type": "text",
+      "id": "title",
+      "label": "Tab Title"
+      },
+      {
+      "type": "text",
+      "id": "link_to_anchor",
+      "label": "Link to an Anchor",
+      "info": "If you would prefer to link to another content block than showing a tab, use this option."
+      },
+      {
+      "type": "richtext",
+      "id": "richtext_1",
+      "label": "Richtext Content 1"
+      },
+      {
+      "type": "html",
+      "id": "html_content_2",
+      "label": "HTML Content 2"
+      },
+      {
+      "type": "image_picker",
+      "id": "optional_image",
+      "label": "Optional Image"
+      },
+      {
+      "type": "checkbox",
+      "id": "swap_direction",
+      "label": "Swap Direction"
+      }
+  ]
+  }
+  ],
+  "presets": [
+  {
+  "name": "Tabbed Section",
+  "category": "Custom Sections"
+  }
+  ]
+  }
+
+  {% endschema %}

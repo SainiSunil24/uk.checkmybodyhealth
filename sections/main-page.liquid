@@ -1,0 +1,169 @@
+{%- liquid
+
+  if section.settings.center
+    assign containter_size = 'compact'
+  else
+    assign containter_size = 'large'
+  endif
+-%}
+
+{% if section.settings.page_cover_metafield != blank %}
+  {% assign metafield_keys = section.settings.page_cover_metafield | split: '.' %}
+  {% assign metafield_value = page.metafields[metafield_keys[0]][metafield_keys[1]] %}
+  {% if metafield_value != blank %}
+    {% assign cover_image = metafield_value | image_url %}
+    {% assign section_height = section.settings.height %}
+    {% assign section_title = page.title %}
+    {% assign text_colour = section.settings.color_text_main %}
+    {% assign bg_colour = section.settings.color_background_main %}
+
+  {% endif %}
+{% elsif metaobject.featured_image != blank %}
+  {% assign meta_type = metaobject.system.type %}
+  {% assign cover_image = metaobject.featured_image.value | image_url %}
+  {% assign section_height = 'small' %}
+  {% assign section_title = metaobject.title %}
+  {% assign section_excerpt = metaobject.excerpt %}
+  {% assign text_colour = "#ffffff" %}
+  {% assign bg_colour = "#00563B" %}
+{% endif %}
+
+{%- if cover_image -%}
+
+  <div class="container--fullwidth reduce-margin-if-first {% if meta_type != blank %} cover_image_container {% endif %} {{meta_type}}" id="element-{{ section.id }}">
+    <div class="card align-content align-content--horizontal-left align-content--vertical-bottom  element--height-{{ section.settings.height }}">
+      <div class="container--large container--vertical-space-small" style="z-index:9">
+        <div class="card__text gutter-bottom--large spacing--small remove-empty-space" style="margin:0">
+          <div class="cover_image_content">
+            <div class="cover_image_text">
+              {%- render 'breadcrumb' container: ''
+                , vertical_space: ''
+                , style: 'breadcrumb-main--margin' -%}
+              <h1 class="title heading-size--page-title container--vertical-space-small">{{ section_title | escape }}</h1>
+              {% if section_excerpt != blank %}
+                <p class="cover_image_excerpt">
+                {{section_excerpt}}
+                </p>
+                {% endif %}
+            </div>
+            <div class="cover_image_cta display-none shadow">
+                <div class="cta_inner cmbh-border-radius">
+                  <div class="text">
+                    <div class="heading">
+                <h5>Start your journey here </h5>
+                <img class="cmbh-logo" src="{{ 'CMBH-icon.svg' | asset_url }}" alt="Check my Body Health">
+                
+                </div><p>Make positive changes to your daily diet and health, find a test thats right for you.</p>
+                  </div>
+                  
+                    <a href="" class="button button--solid   button--icon ">
+                    
+                      <span class="button__icon" role="img" aria-hidden="true"><svg width="21" height="9" viewBox="0 0 21 9" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z"
+                            fill="#000"></path>
+                        </svg></span>
+                      <span class="button__text text-weight-- text-size--">
+                        {% if meta_type == 'food_intolerance' %}
+                          Find a food intolerance test
+                        {% endif %}
+                      </span>
+                    
+                    </a>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card__image card__image--background {% if section.settings.color_background_main != "rgba(0,0,0,0)" %} card__image--with-overlay {% endif %}" aria-hidden="true">
+        {%- render 'lazy-image'
+          , image: cover_image
+          , type: 'background'
+          , alt: page.title
+          , sizes: 'sizes="100vw"'
+          , class: 'lazy-image--to-reveal'
+          , id: section.id
+          , overlay: true -%}
+      </div>
+      {%- render 'custom-colors'
+        , id: section.id
+        , text: text_colour
+        , background: bg_colour
+        , hide_borders: true -%}
+    </div>
+  </div>
+
+{%- else -%}
+
+  {%- render 'breadcrumb' container: containter_size
+    , vertical_space: 'vertical-space-xsmall'
+    , style: 'breadcrumb-main--margin' -%}
+
+{%- endif -%}
+
+<div class="container container--{{ containter_size }} container--vertical-space{% unless cover_image %}-small{% endunless %} main-page gutter-bottom--page">
+
+  {%- unless cover_image -%}
+    <h1 class="title heading-size--page-title">{{ page.title | escape }}</h1>
+  {%- endunless -%}
+  {%- unless page.content == blank -%}
+    <div class="rte {% unless cover_image %}gutter-top--small{% endunless %}">
+      {{ page.content }}
+    </div>
+  {%- endunless -%}
+
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.main-page.name",
+    "class": "section--remove-bottom-margin-after",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "center",
+        "label": "t:sections.local-extra-words.sections.main-page.settings.center.label",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "t:sections.bundle-extra-words.sections.main-page.cover.header"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:sections.bundle-extra-words.sections.main-page.cover.content"
+      },
+      {
+        "type": "text",
+        "id": "page_cover_metafield",
+        "label": "t:sections.bundle-extra-words.sections.main-page.cover.settings.cover_metafield",
+        "info": "custom.cover_image"
+      }, {
+        "type": "color",
+        "id": "color_background_main",
+        "label": "t:sections.local-extra-words.settings_schema.colors.settings.overlay",
+        "default": "rgba(0,0,0,0)"
+      }, {
+        "type": "color",
+        "id": "color_text_main",
+        "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+        "default": "rgba(0,0,0,0)"
+      }, {
+        "type": "select",
+        "id": "height",
+        "label": "t:sections.bundle-extra-words.sections.main-collection.settings.image_banner.height",
+        "options": [
+          {
+            "value": "small",
+            "label": "t:sections.local-extra-words.sections.media-with-text-overlay.settings.option__1"
+          }, {
+            "value": "regular",
+            "label": "t:sections.local-extra-words.sections.media-with-text-overlay.settings.option__2"
+          }
+        ],
+        "default": "small"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,328 @@
+
+
+
+{{ 'cmbh-why-take-a-test.css' | asset_url | stylesheet_tag }}
+
+
+<div class="cmbh-why-take-a-test container--vertical-space-small" style="background-color: {{ section.settings.background_colour }};">
+  <div class="container--large {% if section.settings.background_colour != "#ffffff" %} gutter-bottom--large gutter-top--large {% endif  %}">
+
+    {%- render 'section-heading', heading: section.settings.heading, subheading: section.settings.subheading, heading_size:
+    section.settings.section_heading_size, section_layout: section.settings.section_heading_layout, button:
+    section.settings.cta_label, button_label: section.settings.cta_label, link: section.settings.cta_url, seo_h_tag:
+    section.settings.seo_h_tag -%}
+
+
+<div class="flex inner {% if section.settings.collapse_to_scroll_on_mobile == 'yes' %} scoll_on_mobile {% endif %} {% if section.settings.justify_content %} justify-{{section.settings.justify_content}} {% endif %}">
+  {% if section.settings.collapse_to_scroll_on_mobile == 'yes' %}<div class="scoll_on_mobile_slide"> {% endif %}
+  {%- for block in section.blocks -%}
+        {%- case block.type %}
+          {%- when 'flex_box' -%}
+            <div class="flex ">
+              <div class="col-inner {% if block.settings.border %} add_border {% endif %}">
+                {%- if block.settings.image != blank -%}
+                  <img class="icon_image" src="{{ block.settings.image | img_url: '150x' }}" alt="Icon Image" />
+                  
+                {%- endif -%}
+                <h4>{{block.settings.title}}</h4>
+                {{block.settings.text}}
+              </div>
+            </div>
+          {%- when 'flex_image' -%}
+            <div class="flex img ">
+              {% if block.settings.image_link %}
+              <a target="_blank" href="{{block.settings.image_link}}">
+                {% endif %}
+              <img src="{{ block.settings.image | image_url: width: 300, height: 300, crop: 'center' }}"
+                alt="{{ block.settings.image.alt | escape }}" srcset="
+                                {{ block.settings.image | image_url: width: 300, height: 300, crop: 'center' }} 64w
+                                {% if block.settings.image.width >= 128 %}, {{ block.settings.image | image_url: width: 128, height: 128, crop: 'center' }} 128w {% endif %} 
+                                {% if block.settings.image.width >= 192 %}, {{ block.settings.image | image_url: width: 192, height: 192, crop: 'center' }} 192w {% endif %} 
+                                {% if block.settings.image.width >= 256 %}, {{ block.settings.image | image_url: width: 256, height: 256, crop: 'center' }} 256w {% endif %} 
+                              " loading="lazy" onload="this.classList.add('lazyloaded');" sizes="300px" width="300" height="300"
+                class="{% if block.settings.border %} add_border {% endif %}" />
+                {% if block.settings.image_link %}
+                </a>
+                {% endif %}
+            </div>
+          {%- when 'icon_box' -%}
+          <div class="flex icon">
+            {% if block.settings.image_link %}
+              <a target="_blank" href="{{block.settings.image_link}}">
+            {% endif  %}
+              <img src="{{ block.settings.image | image_url: width: 64 }}" alt="{{ block.settings.image.alt | escape }}" srcset="
+                                {{ block.settings.image | image_url: width: 64 }} 64w
+                                {% if block.settings.image.width >= 128 %}, {{ block.settings.image | image_url: width: 128 }} 128w {% endif %} 
+                                {% if block.settings.image.width >= 192 %}, {{ block.settings.image | image_url: width: 192 }} 192w {% endif %} 
+                                {% if block.settings.image.width >= 256 %}, {{ block.settings.image | image_url: width: 256 }} 256w {% endif %} 
+                                {% if block.settings.image.width >= 320 %}, {{ block.settings.image | image_url: width: 320 }} 320w {% endif %} 
+                              " loading="lazy" onload="this.classList.add('lazyloaded');" sizes="128px"
+                width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" class="{% if block.settings.border %} add_border {% endif %}"/>
+            {% if block.settings.image_link %}
+              </a>
+            {% endif %}
+          </div>
+        {% endcase %}
+      {%- endfor -%}
+    </div>
+
+</div>
+{% if section.settings.collapse_to_scroll_on_mobile == 'yes' %}</div>{% endif %}
+</div>
+
+
+
+
+
+  {% schema %}
+  {
+  "name": "CMBH - Why take a test",
+  "settings": [
+  {
+  "type": "color",
+  "id": "background_colour",
+  "label": "Background Color",
+  "default": "#ffffff"
+  },
+
+    {
+    "type": "header",
+    "content": "t:sections.bundle-extra-words.sections.headings.layout.label"
+    },
+    {
+    "type": "radio",
+    "id": "collapse_to_scroll_on_mobile",
+    "label": "Collapse to scroll on mobile",
+    "options": [
+    {
+    "value": "yes",
+    "label": "Yes"
+    },
+    {
+    "value": "no",
+    "label": "No"
+    }
+    ],
+    "default": "no"
+    },
+    {
+    "type": "inline_richtext",
+    "id": "heading",
+    "label": "t:sections.local-extra-words.sections.headings.heading",
+    "default": "Info tabs"
+    },
+    {
+    "type": "inline_richtext",
+    "id": "subheading",
+    "label": "t:sections.local-extra-words.sections.headings.subheading",
+    "default": "Describe, <strong>promote</strong>, explain"
+    },
+    {
+    "type": "select",
+    "id": "section_heading_size",
+    "label": "t:sections.bundle-extra-words.sections.headings.size.label",
+    "options": [
+    {
+    "value": "text-size--regular",
+    "label": "t:sections.bundle-extra-words.sections.headings.size.option_1"
+    },
+    {
+    "value": "text-size--large",
+    "label": "t:sections.bundle-extra-words.sections.headings.size.option_2"
+    }
+    ],
+    "default": "text-size--regular"
+    },
+    {
+    "type": "select",
+    "id": "section_heading_layout",
+    "label": "t:sections.bundle-extra-words.sections.headings.alignment.label",
+    "options": [
+    {
+    "value": "section-heading--left section-heading--one-row",
+    "label": "t:sections.bundle-extra-words.sections.headings.alignment.option_1",
+    "group": "t:sections.bundle-extra-words.sections.headings.layout.option_1"
+    },
+    {
+    "value": "section-heading--left section-heading--two-rows",
+    "label": "t:sections.bundle-extra-words.sections.headings.alignment.option_1",
+    "group": "t:sections.bundle-extra-words.sections.headings.layout.option_2"
+    },
+    {
+    "value": "section-heading--center section-heading--two-rows",
+    "label": "t:sections.bundle-extra-words.sections.headings.alignment.option_2",
+    "group": "t:sections.bundle-extra-words.sections.headings.layout.option_2"
+    }
+    ],
+    "default": "section-heading--left section-heading--one-row"
+    },
+    {
+    "type": "text",
+    "id": "cta_label",
+    "label": "t:sections.bundle-extra-words.settings_schema.labels.button_text"
+    },
+    {
+    "type": "url",
+    "id": "cta_url",
+    "label": "t:sections.bundle-extra-words.settings_schema.labels.button_url"
+    },
+    {
+    "type": "header",
+    "content": "t:sections.refactor_words.seo.name"
+    },
+    {
+    "type": "select",
+    "id": "seo_h_tag",
+    "label": "t:sections.refactor_words.seo.label",
+    "info": "t:sections.refactor_words.seo.info",
+    "options": [
+    {
+    "value": "h1",
+    "label": "H1"
+    },
+    {
+    "value": "h2",
+    "label": "H2"
+    },
+    {
+    "value": "h3",
+    "label": "H3"
+    },
+    {
+    "value": "h4",
+    "label": "H4"
+    },
+    {
+    "value": "span",
+    "label": "span"
+    }
+    ],
+    "default": "h2"
+    },
+    {
+    "type": "header",
+    "content": "Layout"
+    },{
+    "type": "select",
+    "id": "justify_content",
+    "label": "Justify Content",
+    "options": [
+    {
+    "value": "center",
+    "label": "Center"
+    },
+    {
+    "value": "flex-end",
+    "label": "Flex End"
+    },
+    {
+    "value": "flex-start",
+    "label": "Flex Start"
+    }
+    ],
+    "default": "center"
+    }
+    
+  ],
+  "blocks": [
+    {
+    "type": "flex_box",
+    "name": "Flex Box",
+    "settings": [
+      {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+      },
+      {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your title here..."
+      },
+      {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Your text here...</p>"
+      },
+      {
+      "type": "checkbox",
+      "id": "border",
+      "label": "Add border",
+      "default": false
+      },
+      {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+      }
+    ]
+    },
+    {
+    "type": "flex_image",
+    "name": "Image Box",
+    "settings": [
+      {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+      },
+      {
+      "type": "checkbox",
+      "id": "border",
+      "label": "Add border",
+      "default": false
+      },
+      {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+      },
+      {
+        "type": "url",
+        "id": "image_link",
+        "label": "Image URL"
+      }
+    ]
+    },
+    {
+    "type": "icon_box",
+    "name": "Icon Box",
+    "settings": [
+      {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+      },
+      {
+      "type": "checkbox",
+      "id": "border",
+      "label": "Add border",
+      "default": false
+      },
+      {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+      },
+      {
+      "type": "url",
+      "id": "image_link",
+      "label": "Image URL"
+      }
+    ]
+    }
+  ],
+  "presets": [
+    {
+    "name": "CMBH - Why take a test",
+    "category": "Custom Sections"
+    }
+  ]
+  }
+
+  {% endschema %}

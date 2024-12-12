@@ -1,0 +1,75 @@
+{% schema %}
+{
+  "name": "Video Embed",
+  "tag": "section",
+  "class": "cmbh-common-symptoms",
+  "settings": [
+    {
+      "type": "text",
+      "label": "Title",
+      "id": "title",
+      "default": "Video title",
+      "placeholder": "Enter here"
+    }, 
+    {
+    "type": "text",
+    "label": "Video ID (ie youtube:ZdxMSulVGsM)",
+    "id": "video_id",
+    "default": "ZdxMSulVGsM",
+    "placeholder": "Add Video ID here"
+    },
+    {
+          "type": "color",
+          "id": "color_background_main",
+          "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+          "default": "rgba(0,0,0,0)"
+        },{
+          "type": "checkbox",
+          "id": "gutter_decrease",
+          "label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+          "default": false
+        }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "CMBH - Video Embed",
+      "category": "CMBH"
+    }
+  ]
+}
+{% endschema %}
+
+
+{%- if section.settings.video_id != "" -%}
+
+<div class=" container--vertical-space{% if section.settings.gutter_decrease %}-small{% endif %}" style="background-color:{{section.settings.color_background_main}}">
+  <div class="container--large " style="padding:50px 0;">
+    <div class="container--large ">
+        {% if section.settings.title %}
+            <h4 class="gutter-bottom--small">{{section.settings.title}}</h4>
+        {% endif %}
+      <style>
+        .embed-container {
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0;
+          overflow: hidden;
+          max-width: 100%;
+        }
+      
+        .embed-container iframe,
+        .embed-container object,
+        .embed-container embed {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      </style>
+      <div class='embed-container '><iframe src='https://www.youtube.com/embed/{{section.settings.video_id}}' frameborder='0' allowfullscreen></iframe></div>
+    </div>
+  </div>
+</div>
+{%- endif -%}

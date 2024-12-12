@@ -1,0 +1,71 @@
+{% schema %}
+{
+  "name": "Common Symptoms",
+  "tag": "section",
+  "class": "cmbh-common-symptoms",
+  "settings": [
+    {
+      "type": "text",
+      "label": "Title",
+      "id": "title",
+      "default": "Common Symptoms",
+      "placeholder": "Enter here"
+    }, {
+          "type": "color",
+          "id": "color_background_main",
+          "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+          "default": "rgba(0,0,0,0)"
+        },{
+          "type": "checkbox",
+          "id": "gutter_decrease",
+          "label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+          "default": false
+        }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "CMBH - Common Symptoms",
+      "category": "CMBH"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
+{% assign common_symptoms = shop.metaobjects.common_symptoms.values %}
+
+{% if common_symptoms %}
+  <div class=" container--vertical-space{% if section.settings.gutter_decrease %}-small{% endif %}" style="background-color:{{section.settings.color_background_main}}">
+<div class="container--large " style="padding:50px 0;">
+    <div class="container--large container--vertical-space-xsmall">
+        {% if section.settings.title %}
+            <h3>{{section.settings.title}}</h3>
+        {% endif %}
+        <ul>
+        <div class="grid grid--layout grid-4 grid-lap-1">
+            {% for symptom in common_symptoms %}
+              
+                <li class="gutter-bottom--regular">
+                {%- render 'lazy-image'
+                , image: symptom.featured_image
+                , sizes: sizes
+                , class: 'lazy-image--to-reveal '
+                , preload: preload -%}
+                <h4>{{ symptom.title }}</h4>
+                <p class="text-size--small ">{{ symptom.excerpt }}</p>
+                <a href="{{symptom.system.url}}" class="button   button--icon ">
+                    <span class="button__icon" role="img" aria-hidden="true"><svg width="21" height="9" viewBox="0 0 21 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z" fill="#000"></path></svg></span>
+                    <span class="button__text text-weight-- text-size--">Learn more</span>
+                </a>
+                </li>
+            {% endfor %}
+            </div>
+        </ul>
+    </div></div></div>
+{% endif %}

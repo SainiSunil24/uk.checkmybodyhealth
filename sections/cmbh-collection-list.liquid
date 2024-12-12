@@ -1,0 +1,135 @@
+{{ 'cmbh-collection-list.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+{
+"name": "Collection list",
+"tag": "section",
+"class": "cmbh-collection-list",
+"settings": [
+{
+"type": "text",
+"label": "Title",
+"id": "title",
+"default": "What's tested",
+"placeholder": "Enter here"
+},{
+"type": "text",
+"label": "Subtitle",
+"id": "subtitle",
+"default": "A short explainer or qualifer line here",
+"placeholder": "Enter here"
+},
+{
+  "type": "collection",
+  "label": "Choose collection",
+  "id": "select_collection",
+  "info": "Select a collection"
+},
+{
+"type": "range",
+"label": "Number of Columns",
+"id": "cols",
+"min": 2,
+"max": 6,
+"step": 1,
+"default": 2
+},{
+"type": "color",
+"id": "color_background_main",
+"label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+"default": "rgba(0,0,0,0)"
+},{
+"type": "checkbox",
+"id": "gutter_decrease",
+"label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+"default": false
+}
+],
+"blocks": [],
+"presets": [
+{
+"name": "CMBH - Collection list",
+"category": "CMBH"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+
+  
+{% endstylesheet %}
+
+
+{% javascript %}
+{% endjavascript %}
+
+
+  <div>
+{% assign selected_collection = collections[section.settings.select_collection] %}
+{% assign selected_products = selected_collection.products %}
+<div class="" style="background-color:{{section.settings.color_background_main}}">
+    <div class="container--large  ">
+    
+      <div class="section-heading section-heading--left section-heading--one-row gutter-top--large gutter-bottom--large">
+        {% if section.settings.title %}
+          <div>
+          <h3 class="display section-heading__title text-font--secondary text-size--large">{{section.settings.title}}</h3>
+
+          {% if section.settings.subtitle %}
+          <p>{{section.settings.subtitle}}</p>
+          {% endif %}</div>
+        {% endif %}
+      <div class="section-heading__actions">
+        <a href="{{selected_collection.url}}" class="button button--solid element--hide-on-small   button--icon ">
+      
+          <span class="button__icon" role="img" aria-hidden="true">
+            <svg width="21" height="9" viewBox="0 0 21 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z"
+                fill="#000"></path>
+            </svg></span>
+          <span class="button__text text-weight-- text-size--">Shop {{selected_collection.title}}</span>
+      
+        </a>
+      </div>
+      </div>
+     
+      <ul >
+        <div class="gutter-bottom--large">
+        
+          
+
+  <ul class=" grid grid--layout grid-{{section.settings.cols}} grid-lap-1">
+   
+              {% if selected_products %}
+              {% for item in selected_products %}
+                  <li class="feature">
+                  <div class="accordion">
+                    <div class="collection_wrapper">
+                      {%- if item.featured_image -%}
+                        
+                        <div class="collection_image">
+                        <div>
+                        <a href="{{ item.url}}">
+                        {{ item | image_url: width: 200 | image_tag }}
+                        </a>
+                        </div>
+                        </div>
+                       
+                      {%- endif -%}
+                      <div class="collection_info">
+                        <p class="title">{{ item.title }}</p>
+                        <div class="text-size--small text-color--opacity">{{ item.content | truncate: 130}}</div>
+                        <a class="text-size--small " href="{{ item.url}}">View programme</a>
+                      </div>
+                    </div>
+                  </div>
+                  </li>
+              {% endfor %}
+              {% endif %}
+              </ul>
+              </div>
+              </div>
+              </ul>
+              </div>

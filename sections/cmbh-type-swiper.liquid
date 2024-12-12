@@ -1,0 +1,338 @@
+{{ 'section-type-swiper.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.is_fullwidth -%}
+  {% style %}
+    @media screen and (max-width: {{ settings.theme_max_width }}px) {
+      #shopify-section-{{ section.id }} .rich-text__container--image-right .rich-text__text {
+        padding-inline-start: var(--gutter-xlarge) !important;
+      }
+    }
+    @media screen and (max-width: {{ settings.theme_max_width }}px) {
+      #shopify-section-{{ section.id }} .rich-text__container--image-left .rich-text__text {
+        padding-inline-end: var(--gutter-xlarge) !important;
+      }
+    }
+  {% endstyle %}
+{%- endif -%}
+<div class="cmbh-type-swiper " style="background-color:{{section.settings.color_background_main}} ">
+
+  <div
+    class="{% unless section.settings.is_fullwidth %} container--large {% else %} container--fullwidth {% endunless %} {% unless section.settings.remove_margin %} container--vertical-space-small {% endunless %} {% if section.settings.remove_bottom_margin %} container--negative-margin {% endif %}">
+  <div class="section_title">
+ 
+    <{{ section.settings.seo_h_tag }} class="heading display {{ section.settings.title_size }}"  >
+      {{ section.settings.type_swiper_title | escape }}
+    </{{ section.settings.seo_h_tag }}>
+  </div>
+    {% if section.settings.show_selector %}
+      <div class="type-selector-outer">
+        <div class="">{{section.settings.before_selector}}</div>
+        <div class="type-selector">
+          {%- for block in section.blocks -%}
+            {%- case block.type %}
+              {%- when 'image' -%}
+                <span class="option {% if forloop.first %}selected{% endif %}" data-slide="{{ forloop.index0 }}">{{ block.settings.title }}</span>
+              {%- endcase %}
+            {%- endfor -%}
+        </div>
+        <div class="">{{section.settings.after_selector}}</div>
+      </div>
+    {% endif %}
+
+  </div>
+
+{% assign sizes = '(max-width: 467px) calc((100vw - 40px) / 2), (max-width: 1360px) calc((100vw - 100px) / 3), 453px' %}
+<div class="container--large">
+  <swiper-container class="swiper-container type-swiper" pagination="false"   init="false">
+    {%- for block in section.blocks -%}
+      {%- case block.type %}
+      {%- when 'image' -%}
+        <swiper-slide>
+          <div class="flex">
+            <div class="flex-col type_image">
+              <img src="{{ block.settings.image | img_url: '720x720' }}" alt="{{ block.settings.image.alt | escape }}">
+            </div>
+            <div class="flex-col align-center type_text">
+              <div>
+                <{{ block.settings.seo_h_tag }} style="margin-bottom: 0" class="{{ block.settings.title_size }} type_slide_text" {{ block.shopify_attributes }}>
+                  {{ block.settings.slide_heading | escape }}
+                </{{ block.settings.seo_h_tag }}>
+                </div>
+              {%- if block.settings.text != blank -%}
+                <div> 
+                  {{block.settings.text}}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.button_text != blank -%}
+                {%- render 'button', label: block.settings.button_text, link: block.settings.button_link, style: block.settings.button_style_primary, fullwidth: false -%}
+              {%- endif -%}
+            </div>
+          </div>
+        </swiper-slide>
+      {%- endcase %}
+    {%- endfor -%}
+  </swiper-container>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+  <script>
+    const options = document.querySelectorAll('.option');
+    const swiperEl = document.querySelector('.type-swiper');
+
+    const swiperParams = {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      on: {
+        init() {
+          // ...
+        },
+        slideChange: function() {
+          const activeSlideIndex = this.activeIndex;
+          options.forEach(opt => opt.classList.remove('selected'));
+          options[activeSlideIndex].classList.add('selected');
+        },
+      },
+    };
+
+    Object.assign(swiperEl, swiperParams);
+    swiperEl.initialize();
+
+    const swiper = document.querySelector('.type-swiper').swiper;
+
+    options.forEach(option => {
+      option.addEventListener('click', function () {
+        options.forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        const slideIndex = this.getAttribute('data-slide');
+        swiper.slideTo(slideIndex);
+      });
+    });
+  </script>
+
+  
+  
+</div>
+{%- if section.settings.image_border_radius > 0 -%}
+{% style %}
+#shopify-section-{{ section.id }} figure,
+#shopify-section-{{ section.id }} img {
+border-radius: {{ section.settings.image_border_radius }}px;
+}
+{% endstyle %}
+{%- endif -%}
+      </div>
+
+</div>
+
+    
+  {% schema %}
+    {
+      "name": "CMBH - Type Swiper",
+      "class": "can-be-fullwidth merged-section  supports-absolute-header",
+      "max_blocks": 9,
+      "settings": [
+        {
+        "type": "header",
+        "content": "t:sections.refactor_words.seo.name"
+        },
+        {
+        "type": "select",
+        "id": "title_size",
+        "label": "t:sections.rich-text.blocks.heading.settings.heading_size.label",
+          "options": [
+          {
+          "value": "heading-size--tiny",
+          "label": "Small"
+          },
+          {
+          "value": "heading-size--small",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+          }, {
+          "value": "heading-size--regular",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+          }, {
+          "value": "heading-size--large",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__3.label"
+          }
+          ],
+        "default": "heading-size--regular"
+        },
+         {
+        "type": "select",
+        "id": "seo_h_tag",
+        "label": "t:sections.refactor_words.seo.label",
+        "info": "t:sections.refactor_words.seo.info",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "span",
+            "label": "span"
+          }
+        ],
+        "default": "h2"
+        },
+        {
+        "type": "text",
+        "id": "type_swiper_title",
+        "label": "Title for section",
+        "default": "Discover ways to improve your health"
+        },
+        { 
+          "type":"checkbox",
+          "id": "show_selector",
+          "label": "Show the selector?",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "before_selector",
+          "label": "Text before the selector",
+          "default": "I want to"
+        },
+        {
+        "type": "text",
+        "id": "after_selector",
+        "label": "Text to show after the selector",
+        "default": "my health."
+        }
+      ],
+      "blocks": [
+        {
+          "type": "image",
+          "name": "Type Slide",
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": "Title in swiper nav",
+              "default": "Test"
+            },
+            {
+              "type": "header",
+              "content":"Slide contents"
+            },{
+              "id": "image",
+              "type": "image_picker",
+              "label": "t:sections.gallery.blocks.image.settings.image.label"
+            },{
+              "type": "text",
+              "id": "slide_heading",
+              "label": "Slide Heading",
+              "default": "Get the answers that you’ve been looking for with one of our home-to-lab test."
+            },{
+              "type": "html",
+              "id": "text",
+              "label": "t:sections.rich-text.blocks.text.settings.text.label",
+              "default": "<p>Get the answers that you’ve been looking for with one of our home-to-lab test.</p>"
+            },{
+              "type": "select",
+              "id": "title_size",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.label",
+              "options": [
+                {
+                "value": "heading-size--tiny",
+                "label": "Small"
+                },
+                {
+                  "value": "heading-size--small",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+                }, {
+                  "value": "heading-size--regular",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+                }, {
+                  "value": "heading-size--large",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__3.label"
+                }
+              ],
+              "default": "heading-size--regular"
+            },
+            {
+              "type": "select",
+              "id": "seo_h_tag",
+              "label": "t:sections.refactor_words.seo.label",
+              "info": "t:sections.refactor_words.seo.info",
+              "options": [
+                {
+                "value": "h1",
+                "label": "H1"
+                },
+                {
+                "value": "h2",
+                "label": "H2"
+                },
+                {
+                "value": "h3",
+                "label": "H3"
+                },
+                {
+                "value": "h4",
+                "label": "H4"
+                },
+                {
+                "value": "span",
+                "label": "span"
+                }
+              ],
+              "default": "h2"
+            },
+            {
+              "type": "header",
+              "content":"Button"
+            },
+            {
+              "type": "text",
+              "default": "Buy now",
+              "id": "button_text",
+              "label": "Button text",
+              "info": "Button wont show if empty"
+            },
+            {
+              "type": "url",
+              "id": "button_link",
+              "label": "Button link"
+            },
+            {
+            "id": "button_style_primary",
+            "label": "Primary button style",
+            "type": "select",
+            "options": [
+            {
+            "value": "outline",
+            "label": "t:sections.local-extra-words.sections.buttons.style.option__1"
+            },
+            {
+            "value": "solid",
+            "label": "t:sections.local-extra-words.sections.buttons.style.option__2"
+            }
+            ],
+            "default": "solid"
+            }
+
+          ]
+        }
+      ],
+      "presets": [
+        {
+          "name": "CMBH - Type Swiper",
+          "blocks": [
+            {
+              "type": "image"
+            }
+          ]
+        }
+      ]
+    }
+  {% endschema %}

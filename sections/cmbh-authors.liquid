@@ -1,0 +1,83 @@
+{% schema %}
+  {
+    "name": "Authors",
+    "tag": "section",
+    "class": "cmbh-authors",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "author_image",
+        "label": "Author's Image"
+      },
+      {
+        "type": "text",
+        "id": "name",
+        "label": "Name"
+      },
+      {
+        "type": "text",
+        "id": "job_title",
+        "label": "Job Title"
+      },
+      {
+        "type": "text",
+        "id": "qualifications",
+        "label": "Qualifications"
+      }, {
+        "type": "text",
+        "id": "bio",
+        "label": "Bio"
+      }
+    ],
+    "blocks": [],
+    "presets": [
+      {
+        "name": "CMBH - Authors",
+        "category": "CMBH"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+
+{% javascript %}
+{% endjavascript %}
+
+<div class="container--large container--vertical-space-xsmall cmbh-authors">
+  <div class="grid grid--layout grid-4 grid-lap-1">
+
+    {% assign metaobject_products = shop.metaobjects['author'].values %}
+    {% for author in metaobject_products %}
+      {% assign name = author.name %}
+      {% assign linkedin = author.linkedin %}
+      <div class="author-col gutter-bottom--large">
+        <div class="author-image ">
+          {%- render 'lazy-image'
+            , image: author.image
+            , sizes: sizes
+            , class: 'lazy-image--to-reveal '
+            , preload: preload -%}
+        </div>
+        <div class="author-bio">
+          <h4>{{ name }}</h4>
+          <p class="text-color--opacity">
+            {% if author.job_title %}
+              {{ author.job_title }} |
+            {% endif %}
+            <span class="text-color--opacity">{{ author.qualifications }}</span>
+          </p>
+          <a href="{{author.system.url}}" class="button   button--icon ">
+                    <span class="button__icon" role="img" aria-hidden="true"><svg width="21" height="9" viewBox="0 0 21 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z" fill="#000"></path></svg></span>
+                    <span class="button__text text-weight-- text-size--">Learn more</span>
+                </a>
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+
+
+</div>

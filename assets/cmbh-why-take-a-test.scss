@@ -1,0 +1,119 @@
+.cmbh-why-take-a-test {
+  .flex.inner {
+    gap: var(--grid-gap);
+
+    &.justify-center {
+      justify-content: center;
+    }
+
+    &.justify-flex-start {
+      justify-content: flex-start;
+
+    }
+
+    &.justify-flex-end {
+      justify-content: flex-end;
+
+    }
+
+    .scoll_on_mobile_slide {
+      display: flex;
+      gap: var(--grid-gap);
+    }
+
+    @media screen and (max-width: 767px) {
+      &.scoll_on_mobile {
+        flex: none;
+        display: block;
+        overflow: scroll;
+
+        .scoll_on_mobile_slide {
+          display: inline-flex;
+
+          .flex.img,
+          .flex.icon {
+
+            display: block;
+
+            a {
+              display: block;
+            }
+
+            img {
+              display: block;
+            }
+          }
+
+          .flex {
+            min-width: 314px;
+          }
+
+          .flex.img {
+            min-width: 314px;
+          }
+
+          .flex.icon {
+            min-width: 90px;
+          }
+        }
+      }
+    }
+
+    .col {
+      flex-direction: column;
+      flex-grow: 1;
+      flex-basis: 0;
+
+
+
+      .col-inner {
+        padding: 20px;
+        height: 100%;
+
+
+        &.add_border {
+          border: solid 1px var(--color-text-main);
+          border-radius: var(--border-radius-product-card);
+        }
+
+        .icon_image {
+          max-width: var(--cmbh-icon-width);
+          max-height: var(--cmbh-icon-width);
+          margin-bottom: var(--grid-gap);
+        }
+      }
+    }
+
+    .img {
+      img {
+        width: 100%;
+        height: auto;
+        max-width: 300px;
+        margin: 0 auto;
+
+        &.add_border {
+
+          border-radius: var(--border-radius-product-card);
+          overflow: hidden;
+        }
+      }
+    }
+
+    .icon {
+      align-items: center;
+
+      img {
+        width: 100%;
+        height: auto;
+        max-width: 100px;
+        margin: 0 auto;
+
+        &.add_border {
+
+          border-radius: var(--border-radius-product-card);
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}

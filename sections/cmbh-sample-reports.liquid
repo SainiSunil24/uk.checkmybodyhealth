@@ -1,0 +1,98 @@
+{{ 'sample-reports.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+{
+"name": "Sample Reports",
+"tag": "section",
+"class": "cmbh-sample-reports",
+"settings": [
+{
+"type": "text",
+"label": "Title",
+"id": "title",
+"default": "Sample Reports",
+"placeholder": "Enter here"
+},{
+"type": "text",
+"label": "Subtitle",
+"id": "subtitle",
+"default": "A short explainer or qualifer line here",
+"placeholder": "Enter here"
+},
+{
+"type": "range",
+"label": "Number of Columns",
+"id": "cols",
+"min": 2,
+"max": 6,
+"step": 1,
+"default": 2
+},{
+"type": "color",
+"id": "color_background_main",
+"label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+"default": "rgba(0,0,0,0)"
+},{
+"type": "checkbox",
+"id": "gutter_decrease",
+"label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+"default": false
+}
+],
+"blocks": [],
+"presets": [
+{
+"name": "CMBH - Sample Reports",
+"category": "CMBH"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+
+{% javascript %}
+{% endjavascript %}
+
+{% assign sample_reports = shop.metaobjects.sample_reports.values %}
+
+{% if sample_reports %}
+<div class=" container--vertical-space{% if section.settings.gutter_decrease %}-small{% endif %}"
+  style="background-color:{{section.settings.color_background_main}}">
+    <div class="container--large container--vertical-space-xsmall ">
+      <div class="title-section">
+        {% if section.settings.title %}
+        <h2>{{section.settings.title}}</h2>
+        {% endif %}
+        {% if section.settings.subtitle %}
+        <p>{{section.settings.subtitle}}</p>
+        {% endif %}
+      </div>
+      <ul>
+        <div class="grid grid--layout grid-{{section.settings.cols}} grid-lap-1">
+          {% for report in sample_reports %}
+          <li class="gutter-top--regular gutter-bottom--regular">
+
+            <h5>{{ report.title }}</h5>
+            {% if report.short_description %}
+            <p>{{report.short_description}}</p>
+            {% endif %}
+            {% if report.file %}
+              <a href="{{ report.file.value.url }}"  target="_blank">
+              {%- render 'lazy-image'
+              , image: report.image
+              , sizes: sizes
+              , class: 'lazy-image--to-reveal '
+              , preload: preload -%}
+              </div>
+              </a>
+              {% endif %}
+          </li>
+          {% endfor %}
+        </div>
+      </ul>
+    </div>
+</div>
+{% endif %}

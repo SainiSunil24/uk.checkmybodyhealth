@@ -1,0 +1,469 @@
+{{ 'section-collection-swiper.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.is_fullwidth -%}
+  {% style %}
+    @media screen and (max-width: {{ settings.theme_max_width }}px) {
+      #shopify-section-{{ section.id }} .rich-text__container--image-right .rich-text__text {
+        padding-inline-start: var(--gutter-xlarge) !important;
+      }
+    }
+    @media screen and (max-width: {{ settings.theme_max_width }}px) {
+      #shopify-section-{{ section.id }} .rich-text__container--image-left .rich-text__text {
+        padding-inline-end: var(--gutter-xlarge) !important;
+      }
+    }
+  {% endstyle %}
+{%- endif -%}
+<div class="cmbh-collection-swiper " style="background-color:{{section.settings.color_background_main}} ">
+<div class="{% unless section.settings.is_fullwidth %} container--large {% else %} container--fullwidth {% endunless %} {% unless section.settings.remove_margin %} container--vertical-space{% if section.settings.gutter_decrease %}-small{% endif %} {% endunless %} {% if section.settings.remove_bottom_margin %} container--negative-margin {% endif %}">
+    <div class="container--fullwidth ">
+      <div id="element-{{ section.id }}" class="card card--no-borders rich-text gutter-bottom--large" {% if section.settings.image_position contains 'no-image' %} style="display:flex" {% endif %} >
+            {%- liquid
+              if section.index == 1
+                assign preload = true
+              else
+                assign preload = false
+              endif
+            -%}
+          <div class="header-section ">
+            <div class="cmbh-grid grid{%- if section.settings.image == blank -%} _1 {%- else  -%}  _2  {%- endif -%}">
+              {%- unless section.settings.image == blank -%}
+                <div class="rich_text_image_container {% unless section.settings.image_crop %} rich-text__image--fit {% endunless %} {% if section.settings.image_position == "top" %} element--height-{{ section.settings.height }} {% endif %}" aria-hidden="true">
+                  {%- liquid
+                    unless section.settings.image == blank
+                      render 'lazy-image', image: section.settings.image, type: '', alt: section.settings.title, image_alignment: true, id: section.id, class: 'lazy-image--to-reveal', preload: preload
+                    else
+                      echo 'image' | placeholder_svg_tag
+                    endunless
+                  -%}
+                </div>
+              {%- endunless -%}
+
+              <div class=" align-content align-content--{{ section.settings.text_alignment }} align-content--vertical-middle  ">
+                <div class="card__text spacing--custom remove-empty-space" style="--spacing:{{ section.settings.spacing }}px">
+                  {%- for block in section.blocks -%}
+                    {%- case block.type %}
+                      {%- when 'cols' -%}
+                      {% assign cols_count = block.settings.content_columns %}
+                        <div class="content_inner_grid grid_{{cols_count}}"> 
+
+                          {%- when 'title' -%}
+                            <div>
+                              <{{ block.settings.seo_h_tag }} style="margin-bottom: 0"  class="display {{ block.settings.title_size }}" {{ block.shopify_attributes }} >
+                                {{ block.settings.title | escape }}
+                              </{{ block.settings.seo_h_tag }}>
+                            </div>
+
+                          {%- when 'text' -%}
+                            <div class="rte text-size--{{ block.settings.text_size }}" {{ block.shopify_attributes }}>
+                              {{ block.settings.text }}
+                            </div>
+
+                          {%- when 'htmltext' -%}
+                            <div class="rte text-size--{{ block.settings.text_size }}" {{ block.shopify_attributes }}>
+                              {{ block.settings.htmltext }}
+                            </div>
+
+                          {%- when 'button' -%}
+                            <div {{ block.shopify_attributes }}>
+                              <a href="{{ block.settings.link }}" class="button button--{{ block.settings.button_style }} button--icon">
+                                <span aria-hidden="true" class="button__icon">{%- render 'theme-symbols' , icon: 'arrow-right' -%}</span>
+                                <span>{{ block.settings.button_label | escape }}</span>
+                              </a>
+                            </div>
+
+                          {%- if cols_count != empty -%}
+                        </div>
+                      {%- endif -%}
+                    {%- endcase %}
+                  {%- endfor -%}
+                </div>
+              </div>
+              {%- render 'custom-colors', id: section.id, text: section.settings.color_text_main, background: section.settings.color_background_main, borders: section.settings.color_borders_main, hide_borders: section.settings.color_hide_borders, border_radius: section.settings.border_radius -%}
+            </div>
+            <div class="swiper-nav">
+                <div class="buttons">
+                
+                  <div class="CMBH-button-prev">
+                    <svg width="11" height="20" viewBox="0 0 11 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M0.38296 20.0762C0.111788 19.805 0.111788 19.3654 0.38296 19.0942L9.19758 10.2796L0.38296 1.46497C0.111788 1.19379 0.111788 0.754138 0.38296 0.482966C0.654131 0.211794 1.09379 0.211794 1.36496 0.482966L10.4341 9.55214C10.8359 9.9539 10.8359 10.6053 10.4341 11.007L1.36496 20.0762C1.09379 20.3474 0.654131 20.3474 0.38296 20.0762Z"
+                        fill="currentColor" transform-origin="center" transform="rotate(180)"></path>
+                    </svg>
+                  </div>
+                
+                  <div class="CMBH-button-next">
+                    <svg width="11" height="20" viewBox="0 0 11 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M0.38296 20.0762C0.111788 19.805 0.111788 19.3654 0.38296 19.0942L9.19758 10.2796L0.38296 1.46497C0.111788 1.19379 0.111788 0.754138 0.38296 0.482966C0.654131 0.211794 1.09379 0.211794 1.36496 0.482966L10.4341 9.55214C10.8359 9.9539 10.8359 10.6053 10.4341 11.007L1.36496 20.0762C1.09379 20.3474 0.654131 20.3474 0.38296 20.0762Z"
+                        fill="currentColor"></path>
+                    </svg>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </div>
+    </div>
+        
+  </div>
+  <div class=" ">
+{% assign sizes = '(max-width: 467px) calc((100vw - 40px) / 2), (max-width: 1360px) calc((100vw - 100px) / 3), 453px' %}
+<div class="swiper-overflow-visible container-large">
+  <swiper-container class="swiper-container collection-swiper" pagination="true"   init="false">
+    {% for collection in section.settings.chosen_collections %}
+    <swiper-slide>
+      {% render 'CMBH-collection-item', collection: collection, index: forloop.index, image: collection.image, sizes:
+      sizes, image_aspect_ratio:"0.83333", image_border_radius: '10px', shopify_attributes: block.shopify_attributes %}
+    </swiper-slide>
+    {% endfor %}
+    
+  </swiper-container>
+     
+  <div class="swiper-navigation-wrapper">
+   <div class="swiper-pagination-wrapper">
+  <div class="swiper-pagination"></div>
+  </div>
+    <div class="swiper-pagination-fraction"></div>
+ 
+  </div>
+ 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    // swiper element
+    const swiperEl = document.querySelector('.collection-swiper');
+
+    // swiper parameters
+    const swiperParams = {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      navigation: {
+        nextEl: ".CMBH-button-next",
+        prevEl: ".CMBH-button-prev",
+        disabledClass: "swiper-button-disabled"
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        bulletElement: 'div',
+        clickable: true,
+        type: 'bullets',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+        1360: {
+          slidesPerView: 3,
+        },
+      },
+      on: {
+        init: function () {
+          updateFraction(this);
+        },
+        slideChange: function () {
+          updateFraction(this);
+        },
+        resize: function () {
+          updateFraction(this);
+        }
+      }
+    };
+
+    // now we need to assign all parameters to Swiper element
+    Object.assign(swiperEl, swiperParams);
+
+    // and now initialize it
+    swiperEl.initialize();
+
+    // Function to update the fraction indicator
+    function updateFraction(swiper) {
+      const currentSlide = swiper.realIndex + 1;
+      const slidesPerView = swiper.params.slidesPerView;
+      const totalSlides = swiper.slides.length - slidesPerView + 1;
+      const fractionEl = document.querySelector('.swiper-pagination-fraction');
+      if (fractionEl) {
+        fractionEl.innerHTML = `${currentSlide} / ${totalSlides}`;
+      }
+    }
+
+  });
+</script>
+
+
+
+
+  
+  
+</div>
+{%- if section.settings.image_border_radius > 0 -%}
+{% style %}
+#shopify-section-{{ section.id }} figure,
+#shopify-section-{{ section.id }} img {
+border-radius: {{ section.settings.image_border_radius }}px;
+}
+{% endstyle %}
+{%- endif -%}
+      </div>
+
+</div>
+
+    
+  {% schema %}
+    {
+      "name": "CMBH - Collection Swiper",
+      "class": "can-be-fullwidth merged-section  supports-absolute-header",
+      "max_blocks": 9,
+      "settings": [
+        {
+          "type": "collection_list",
+          "id": "chosen_collections",
+          "label": "Choose Collections",
+          "info": "Select up to 10 collections",
+          "limit": 10
+        },
+        {
+        "type": "range",
+        "id": "image_border_radius",
+        "label": "t:sections.bundle-extra-words.sections.main-product-page.settings.gallery.border_radius",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+        }, {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "t:sections.image-with-text.settings.text_alignment.label",
+          "options": [
+            {
+              "value": "horizontal-left",
+              "label": "t:sections.rich-text.settings.text_alignment.options__1.label"
+            }, {
+              "value": "horizontal-center",
+              "label": "t:sections.rich-text.settings.text_alignment.options__2.label"
+            }, {
+              "value": "horizontal-right",
+              "label": "t:sections.rich-text.settings.text_alignment.options__3.label"
+            }
+          ],
+          "default": "horizontal-center"
+        }, {
+          "type": "range",
+          "id": "spacing",
+          "label": "t:sections.bundle-extra-words.settings_schema.labels.spacing",
+          "min": -12,
+          "max": 60,
+          "step": 1,
+          "default": 24,
+          "unit": "px"
+        }, {
+          "type": "header",
+          "content": "t:sections.bundle-extra-words.settings_schema.card.settings.design.header"
+        }, {
+          "type": "color",
+          "id": "color_background_main",
+          "label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+          "default": "rgba(0,0,0,0)"
+        }, {
+          "type": "color",
+          "id": "color_text_main",
+          "label": "t:sections.split-extra-words.settings_schema.colors.settings.text",
+          "default": "rgba(0,0,0,0)"
+        },  {
+          "type": "header",
+          "content": "t:sections.bundle-extra-words.sections.headings.gutter.label"
+        }, {
+          "type": "checkbox",
+          "id": "gutter_decrease",
+          "label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+          "default": false
+        }, {
+          "type": "checkbox",
+          "id": "remove_margin",
+          "label": "t:sections.local-extra-words.sections.rich-text.settings.remove_margin.label",
+          "default": false
+        }, {
+          "type": "checkbox",
+          "id": "remove_bottom_margin",
+          "label": "t:sections.local-extra-words.settings_schema.layout.sections.remove_bottom_margin",
+          "default": false
+        }
+      ],
+      "blocks": [
+        {
+          "type": "title",
+          "name": "t:sections.rich-text.blocks.heading.name",
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading.label",
+              "default": "Talk about your brand"
+            }, {
+              "type": "select",
+              "id": "title_size",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.label",
+              "options": [
+                {
+                "value": "heading-size--tiny",
+                "label": "Small"
+                },
+                {
+                  "value": "heading-size--small",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+                }, {
+                  "value": "heading-size--regular",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+                }, {
+                  "value": "heading-size--large",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__3.label"
+                }
+              ],
+              "default": "heading-size--regular"
+            }, {
+              "type": "header",
+              "content": "t:sections.refactor_words.seo.name"
+            }, {
+              "type": "select",
+              "id": "seo_h_tag",
+              "label": "t:sections.refactor_words.seo.label",
+              "info": "t:sections.refactor_words.seo.info",
+              "options": [
+                {
+                  "value": "h1",
+                  "label": "H1"
+                },
+                {
+                  "value": "h2",
+                  "label": "H2"
+                },
+                {
+                  "value": "h3",
+                  "label": "H3"
+                },
+                {
+                  "value": "h4",
+                  "label": "H4"
+                }, {
+                  "value": "span",
+                  "label": "span"
+                }
+              ],
+              "default": "h2"
+            }
+          ]
+        },{
+        "type": "htmltext",
+        "name": "HTML text block",
+          "settings": [
+              {
+              "type": "html",
+              "id": "htmltext",
+              "label": "t:sections.rich-text.blocks.text.settings.text.label"
+              }, {
+              "type": "select",
+              "id": "text_size",
+              "label": "t:sections.footer.blocks.text.settings.text_size.label",
+              "options": [
+              {
+              "value": "regular",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+              }, {
+              "value": "large",
+              "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+              }
+              ],
+              "default": "regular"
+              }
+          ]
+        },{
+        "type": "cols",
+        "name": "Columns",
+        "settings": [
+          {
+          "type": "range",
+          "id": "content_columns",
+          "label": "Content columns",
+          "min": 1,
+          "max": 3,
+          "step": 1,
+          "default": 1
+          }
+        ]
+        },
+         {
+          "type": "text",
+          "name": "t:sections.rich-text.blocks.text.name",
+          "settings": [
+            {
+              "type": "richtext",
+              "id": "text",
+              "label": "t:sections.rich-text.blocks.text.settings.text.label",
+              "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements or welcome customers to your store.</p>"
+            }, {
+              "type": "select",
+              "id": "text_size",
+              "label": "t:sections.footer.blocks.text.settings.text_size.label",
+              "options": [
+                {
+                  "value": "regular",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__1.label"
+                }, {
+                  "value": "large",
+                  "label": "t:sections.rich-text.blocks.heading.settings.heading_size.options__2.label"
+                }
+              ],
+              "default": "regular"
+            }
+          ]
+        }, 
+        {
+          "type": "button",
+          "name": "t:sections.rich-text.blocks.button.name",
+          "settings": [
+            {
+              "type": "text",
+              "id": "button_label",
+              "label": "t:sections.rich-text.blocks.button.settings.button_label.label",
+              "default": "Show more"
+            }, {
+              "type": "url",
+              "id": "link",
+              "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
+            }, {
+              "id": "button_style",
+              "label": "t:sections.local-extra-words.sections.buttons.style.label",
+              "type": "select",
+              "options": [
+                {
+                  "value": "outline",
+                  "label": "t:sections.local-extra-words.sections.buttons.style.option__1"
+                }, {
+                  "value": "solid",
+                  "label": "t:sections.local-extra-words.sections.buttons.style.option__2"
+                }
+              ],
+              "default": "outline"
+            }
+          ]
+        }
+      ],
+      "presets": [
+        {
+          "name": "CMBH - Collection Swiper",
+          "blocks": [
+            {
+              "type": "title"
+            }, {
+              "type": "text"
+            }, {
+              "type": "button"
+            }
+          ]
+        }
+      ]
+    }
+  {% endschema %}

@@ -1,0 +1,109 @@
+{{ 'cmbh-items-tested.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+{
+"name": "Items Tested",
+"tag": "section",
+"class": "cmbh-items-tested",
+"settings": [
+{
+"type": "text",
+"label": "Title",
+"id": "title",
+"default": "What's tested",
+"placeholder": "Enter here"
+},{
+"type": "text",
+"label": "Subtitle",
+"id": "subtitle",
+"default": "A short explainer or qualifer line here",
+"placeholder": "Enter here"
+},
+{
+"type": "range",
+"label": "Number of Columns",
+"id": "cols",
+"min": 2,
+"max": 6,
+"step": 1,
+"default": 2
+},{
+"type": "color",
+"id": "color_background_main",
+"label": "t:sections.split-extra-words.settings_schema.colors.settings.background",
+"default": "rgba(0,0,0,0)"
+},{
+"type": "checkbox",
+"id": "gutter_decrease",
+"label": "t:sections.bundle-extra-words.sections.headings.gutter.content",
+"default": false
+}
+],
+"blocks": [],
+"presets": [
+{
+"name": "CMBH - Items tested",
+"category": "CMBH"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+
+  
+{% endstylesheet %}
+
+
+{% javascript %}
+{% endjavascript %}
+
+
+  <div>
+<div class="" style="background-color:{{section.settings.color_background_main}}">
+    <div class="container--large  ">
+      <div class="title-section gutter-top--large gutter-bottom--large">
+        {% if section.settings.title %}
+        <h3>{{section.settings.title}}</h3>
+        {% endif %}
+        {% if product.metafields.custom.items_tested_description %}
+        <div class="opening_para"><p>{{product.metafields.custom.items_tested_description |  metafield_tag}}</p></div>
+        {% endif %}
+      </div>
+      <ul >
+        <div class="gutter-bottom--large">
+        
+          
+
+  <ul class=" grid grid--layout grid-{{section.settings.cols}} grid-lap-1">
+              {% if product.metafields.custom.items_tested %}
+              {% for item_tested in product.metafields.custom.items_tested.value %}
+                  <li class="feature">
+                  <div class="accordion">
+                    <input type="checkbox" id="{{item.system.handle}}{{forloop.index}}" />
+                    <label class="accordion-label" for="{{item.system.handle}}{{forloop.index}}">
+                      {{ item_tested.title }}
+                      <span class="toggle__icon--plus">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6.05664 0.5H7.05664V13.5H6.05664V0.5Z" fill="black"></path>
+                          <path d="M13.0566 6.5V7.5H0.0566406L0.0566407 6.5L13.0566 6.5Z" fill="black"></path>
+                        </svg>
+                      </span>
+                      <span class="toggle__icon--minus">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M13.0566 6.5V7.5H0.0566406L0.0566407 6.5L13.0566 6.5Z" fill="black"></path>
+                        </svg></span>
+                    </label>
+                    <div class="accordion-content cols_mobile{{ item_tested.columns_mobile | default: '3' }} cols_desktop{{ item_tested.columns_desktop | default: '3' }}">
+                      <h5>We test for the following items</h5>
+                      {{ item_tested.content | metafield_tag }}
+                    </div>
+                  </div>
+                  </li>
+              {% endfor %}
+              {% endif %}
+              </ul>
+              </div>
+              </div>
+              </ul>
+              </div>
