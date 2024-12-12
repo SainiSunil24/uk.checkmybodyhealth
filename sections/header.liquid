@@ -163,13 +163,15 @@
           <a class="logo-img logo-img--mobile" title="{{ shop.name | escape }}" href="{{ routes.root_url }}" style="height:var(--header-logo)">
             {%- if original_logo_mobile_src -%}
               <img 
-                src="{{ original_logo_mobile_src | image_url }}" alt="{{ original_logo_mobile_src.alt | escape }}"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" 
+                d-src="{{ original_logo_mobile_src | image_url }}" alt="{{ original_logo_mobile_src.alt | escape }}"
                 width="{{ original_logo_mobile_src.width }}" height="{{ original_logo_mobile_src.height }}"
                 class="absolute-header-icon"
               />
             {%- endif -%}
             <img 
-              src="{{ logo_mobile_src | image_url }}" alt="{{ logo_mobile_src.alt | escape }}"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" 
+              d-src="{{ logo_mobile_src | image_url: width: 200 }}" alt="{{ logo_mobile_src.alt | escape }}"
               width="{{ logo_mobile_src.width }}" height="{{ logo_mobile_src.height }}"
             />
           </a>
@@ -179,13 +181,13 @@
           <a class="logo-img {% if logo_mobile_src != blank %} logo-img--desk-only {% endif %}" title="{{ shop.name | escape }}" href="{{ routes.root_url }}" style="height:var(--header-logo)">
             {%- if original_logo_src -%}
               <img 
-                src="{{ original_logo_src | image_url }}" alt="{{ original_logo_src.alt | escape }}"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="{{ original_logo_src | image_url }}" alt="{{ original_logo_src.alt | escape }}"
                 width="{{ original_logo_src.width }}" height="{{ original_logo_src.height }}"
                 class="absolute-header-icon"
               />
             {%- endif -%}
             <img 
-              src="{{ logo_src | image_url }}" alt="{{ logo_src.alt | escape }}"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="{{ logo_src | image_url }}" alt="{{ logo_src.alt | escape }}"
               width="{{ logo_src.width }}" height="{{ logo_src.height }}"
             />
           </a>

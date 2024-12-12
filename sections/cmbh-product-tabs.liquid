@@ -60,12 +60,12 @@
             {% if prod.display_title == "Delivery" %}
               {% for policy in shop.policies %}
                 {% if policy.title contains 'Shipping policy' %}
-                  {{ policy.body }}
+                  {{ policy.body  }}
                 {% endif %}
               {% endfor %}
             {% endif %}
             <!-- End Delivery policy -->
-            {{ prod.text_column_1 | metafield_tag }}
+            {{ prod.text_column_1 | metafield_tag  }}
           </div>
          
           {% if prod.image %}
@@ -94,7 +94,7 @@
 
             
              {% if product.metafields.custom.product_media.value != blank  %}<div class="col">{% endif  %}
-            {{ product.description }}
+            {{ product.description | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="' | replace: ' srcset="' , ' dt="'  }}
             {% if product.metafields.custom.product_media.value != blank %}</div>{% endif %}
 
           {% if product.metafields.custom.product_media.value.you_tube_id  or product.metafields.custom.product_media.value.image or product.metafields.custom.product_media.value.vimeo_id %}

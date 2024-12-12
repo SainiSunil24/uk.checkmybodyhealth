@@ -49,7 +49,7 @@
         <swiper-slide>
           <div class="flex">
             <div class="flex-col type_image">
-              <img src="{{ block.settings.image | img_url: '720x720' }}" alt="{{ block.settings.image.alt | escape }}">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="{{ block.settings.image | img_url: '720x720' }}" alt="{{ block.settings.image.alt | escape }}">
             </div>
             <div class="flex-col align-center type_text">
               <div>
@@ -59,7 +59,7 @@
                 </div>
               {%- if block.settings.text != blank -%}
                 <div> 
-                  {{block.settings.text}}
+                  {{block.settings.text | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="' | replace: ' srcset="' , ' dt="'  }}
                 </div>
               {%- endif -%}
               {%- if block.settings.button_text != blank -%}
@@ -72,8 +72,8 @@
     {%- endfor -%}
   </swiper-container>
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
-  <script>
+  <script type="load" d-src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+  <script type="load">
     const options = document.querySelectorAll('.option');
     const swiperEl = document.querySelector('.type-swiper');
 

@@ -36,7 +36,7 @@
 
 {%- if no_crop -%}	
 	{%- capture srcset -%} 
-		srcset="
+		datalate-srcset="
 			{%- if image.width >= 240 -%}{{ image | image_url: width: 240 }} 240w{%- endif -%} 
 			{%- if image.width >= 360 -%},{{ image | image_url: width: 360 }} 360w{%- endif -%} 
 			{%- if image.width >= 420 -%},{{ image | image_url: width: 420 }} 420w{%- endif -%} 
@@ -56,7 +56,7 @@
 	{%- endcapture -%}
 {%- else -%}
 	{%- capture srcset -%} 
-		srcset="
+		datalate-srcset="
 			{%- if image.width >= 240 and image.height >= height_240 -%}{{ image | image_url: width: 240, height: height_240, crop: 'center' }} 240w{%- endif -%}
 			{%- if image.width >= 360 and image.height >= height_360 -%},{{ image | image_url: width: 360, height: height_360, crop: 'center' }} 360w{%- endif -%}
 			{%- if image.width >= 420 and image.height >= height_420 -%},{{ image | image_url: width: 420, height: height_420, crop: 'center' }} 420w{%- endif -%}
@@ -88,14 +88,21 @@
 >
 
 	<img
-	  src="{{ image | image_url: width: 480 }}" alt="{{ image_alt | strip_html | escape }}"
+	  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st"
+      {% if template contains 'index' %}
+      ds-src="{{ image | image_url: width: 540 }}" 
+        {% else %}
+      ds-src="{{ image | image_url: width: 420 }}" 
+      {% endif %}
+      d-src="{{ image | image_url: width: 1080 }}" 
+      alt="{{ image_alt | strip_html | escape }}"
 	  {{ srcset }}
 	  class="img"
 	  width="{{ image.width }}"
 	  height="{{ image.height }}"
 		data-ratio="{{ ratio }}"
 	  {{ sizes }}
-	  {% unless preload %} loading="lazy" {% endunless %}
+	  {% unless preload %} {% comment %}loading="lazy" {% endcomment %}{% endunless %}
 		{% if image_alignment %} style="object-position: {{ image.presentation.focal_point }}" {% endif %}
 		{% if id %} id="responsive-background-{{ id }}" {% endif %}
 		onload="this.parentNode.classList.add('lazyloaded');

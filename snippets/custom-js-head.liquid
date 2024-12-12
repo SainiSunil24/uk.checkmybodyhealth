@@ -1,0 +1,24 @@
+<script type="load">
+        var youtubeIframes = document.querySelectorAll('iframe.lazyiframe');
+    
+        youtubeIframes.forEach(function (youtubeIframe) {
+            var dataSrcValue = youtubeIframe.getAttribute('data-src');
+    
+            if (dataSrcValue) {
+                youtubeIframe.setAttribute('src', dataSrcValue);
+                youtubeIframe.removeAttribute('data-src');
+            }
+        });
+</script>
+<script type="load">
+        setInterval(function() {
+            var images = document.querySelectorAll('img[datalate-srcset]');
+            if(images){
+            images.forEach(function (img) {
+                    var dataSrcsetValue = img.getAttribute('datalate-srcset');
+                    img.setAttribute('srcset', dataSrcsetValue);
+                    img.removeAttribute('datalate-srcset');
+            });
+            }
+        }, 1000);
+</script>

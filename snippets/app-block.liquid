@@ -1,0 +1,79 @@
+<script d-src="https://cdn.shopify.com/extensions/a356c7cc-e66a-432b-bb71-64f5f98af5c6/forms-1113/assets/loader.js" type="load"></script>
+
+<!-- BEGIN app block: shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507 -->
+  <script type="load" d-src="https://static.klaviyo.com/onsite/js/WKJNXY/klaviyo.js?company_id=WKJNXY"></script>
+  <script type="load">!function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();</script>
+{% if template contains 'product' %}
+  <script id="viewed_product" type="load">
+      if (item == null) {
+          var _learnq = _learnq || [];
+          var item = {
+              Name: {{ product.title | json }},
+              ProductID: {{ product.id | json }},            
+              Categories: {{ product.collections | map: 'title' | json }},
+              ImageURL: "https:{{ product.featured_image.src | img_url: 'grande' }}",
+              URL: "{{ shop.secure_url }}{{ product.url }}",
+              Brand: {{ product.vendor | json }},
+              Price: {{ product.price | money | json }},
+              CompareAtPrice: {{ product.compare_at_price_max | money | json }}
+          };
+          _learnq.push(['track', 'Viewed Product', item]);
+          _learnq.push(['trackViewedItem', {
+              Title: item.Name,
+              ItemId: item.ProductID,
+              Categories: item.Categories,
+              ImageUrl: item.ImageURL,
+              Url: item.URL,
+              Metadata: {
+                  Brand: item.Brand,
+                  Price: item.Price,
+                  CompareAtPrice: item.CompareAtPrice
+              }
+          }]);
+      }
+  </script>
+  {% endif %}
+  <script type="load">
+    window.klaviyoReviewsProductDesignMode = false
+  </script>
+<!-- END app app block -->
+
+<!-- BEGIN app block: shopify://apps/sliderule-google-analytics-4/blocks/sliderule-analytics/9960d9af-5e49-44da-a5b8-aade858d4324 --><!-- Complete Google Analytics 4 Tracker for Shopify -->
+<script type="load" d-src="https://www.googletagmanager.com/gtag/js?id=G-PRYRPCQFCL" ></script>
+<script type="load">
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  gtag('consent', 'default', {
+    'ad_storage': 'granted',
+    'ad_user_data': 'granted',
+    'ad_personalization': 'granted',
+    'analytics_storage': 'granted'
+  });
+
+  // Initialize Google Analytics
+  gtag("js", new Date());
+
+  // Configure GA4 with a custom page_view event
+  gtag("config", "G-PRYRPCQFCL");
+  
+
+  sraData = {
+    "measurementIds": [
+      "G-PRYRPCQFCL"
+    ]
+  }
+</script>
+<script type="load" d-src="https://cdn.shopify.com/extensions/e0a85fba-8f29-48f8-8967-cf9c8b076036/sliderule-google-analytics-4-29/assets/sliderule-utilities.js"></script>
+<script type="load" d-src="https://cdn.shopify.com/extensions/e0a85fba-8f29-48f8-8967-cf9c8b076036/sliderule-google-analytics-4-29/assets/sliderule-handle-ids.js"></script>
+<script type="load" d-src="https://cdn.shopify.com/extensions/e0a85fba-8f29-48f8-8967-cf9c8b076036/sliderule-google-analytics-4-29/assets/sliderule-ga4-ids.js"></script>
+<script type="load" d-src="https://cdn.shopify.com/extensions/e0a85fba-8f29-48f8-8967-cf9c8b076036/sliderule-google-analytics-4-29/assets/sliderule-google-ads-ids.js"></script>
+<script type="load" d-src="https://cdn.shopify.com/extensions/e0a85fba-8f29-48f8-8967-cf9c8b076036/sliderule-google-analytics-4-29/assets/sliderule-ga4-event-tracking.js"></script>
+
+<!-- END app app block -->
+
+<!-- BEGIN app block: shopify://apps/eg-auto-add-to-cart/blocks/app-embed/0f7d4f74-1e89-4820-aec4-6564d7e535d2 -->
+    <script async type="load" d-src="https://cdn.506.io/eg/script.js?shop=cmbh-uk.myshopify.com"></script>
+<!-- END app app block -->
